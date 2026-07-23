@@ -36,25 +36,13 @@ data class Project(
     val demoUrl: String? = null,
 )
 
-// TODO: replace with your real projects.
+// TODO: add more projects here once the Mogala/Python question is resolved.
 private val sampleProjects = listOf(
     Project(
         title = "This portfolio",
         description = "Kotlin Multiplatform + Compose, compiled to WebAssembly and deployed via GitHub Actions.",
-        tech = listOf("Kotlin", "Compose Multiplatform", "Wasm"),
+        tech = listOf("Kotlin", "Compose Multiplatform", "Wasm", "GitHub Actions"),
         repoUrl = "https://github.com/lyndenenv/lyndenenv.github.io",
-    ),
-    Project(
-        title = "Project two",
-        description = "TODO: swap in a real project description.",
-        tech = listOf("Kotlin", "Ktor"),
-        repoUrl = "https://github.com/lyndenenv",
-    ),
-    Project(
-        title = "Project three",
-        description = "TODO: swap in a real project description.",
-        tech = listOf("Compose", "Android"),
-        repoUrl = "https://github.com/lyndenenv",
     ),
 )
 
@@ -67,10 +55,12 @@ fun HeroSection(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        Text("Lynden", style = MaterialTheme.typography.displayLarge, fontWeight = FontWeight.Bold)
-        Text("Kotlin Multiplatform & Compose developer", style = MaterialTheme.typography.headlineSmall)
+        Text("Lynden Tempies", style = MaterialTheme.typography.displayLarge, fontWeight = FontWeight.Bold)
+        Text("DevOps Engineer & Infrastructure Architect", style = MaterialTheme.typography.headlineSmall)
         Text(
-            "I build native-feeling apps for Android, iOS, desktop, and web from one Kotlin codebase.",
+            "13+ years engineering production systems — CI/CD pipelines, cloud infrastructure, " +
+                "VoIP backends and payment platforms. Now building cross-platform apps with Kotlin " +
+                "Multiplatform and Compose.",
             style = MaterialTheme.typography.bodyLarge,
         )
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -82,7 +72,10 @@ fun HeroSection(modifier: Modifier = Modifier) {
 
 @Composable
 fun AboutSection(modifier: Modifier = Modifier) {
-    val skills = listOf("Kotlin", "Compose Multiplatform", "Jetpack Compose", "Material 3", "Ktor", "Gradle")
+    val skills = listOf(
+        "AWS", "Docker", "CI/CD", "Linux (Debian/Ubuntu)", "Kotlin", "PHP", "PostgreSQL", "MySQL",
+        "Asterisk / VoIP", "Paystack", "Compose Multiplatform",
+    )
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -91,7 +84,11 @@ fun AboutSection(modifier: Modifier = Modifier) {
     ) {
         Text("About", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.SemiBold)
         Text(
-            "TODO: two or three sentences about your background, what you build, and what you're looking for.",
+            "Senior DevOps Engineer and Infrastructure Architect with 13+ years designing, deploying, " +
+                "and maintaining production-grade systems across telecom, cloud, and backend engineering. " +
+                "Currently Technical Team Lead at Nxatel, running CI/CD, AWS infrastructure, and billing/" +
+                "payment backends for a telecom platform. Open to DevOps, infrastructure architecture, and " +
+                "cloud platform roles — contract, freelance, or full-time.",
             style = MaterialTheme.typography.bodyLarge,
         )
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -165,10 +162,13 @@ fun ContactSection(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         Text("Let's talk", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.SemiBold)
-        Text("TODO: your email / preferred contact method.", style = MaterialTheme.typography.bodyLarge)
+        Text(
+            "Johannesburg, South Africa · LyndenTempies@gmail.com · Available for contract, freelance & full-time roles",
+            style = MaterialTheme.typography.bodyLarge,
+        )
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             OutlinedButton(onClick = {}) { Text("GitHub") }
-            OutlinedButton(onClick = {}) { Text("LinkedIn") }
+            OutlinedButton(onClick = {}) { Text("Email") }
             OutlinedButton(onClick = {}) { Text("Resume (PDF)") }
         }
     }
