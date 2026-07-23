@@ -1,47 +1,43 @@
 package org.lyndenenv.github.io.project
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.material3.Button
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import org.jetbrains.compose.resources.painterResource
+import org.lyndenenv.github.io.project.sections.AboutSection
+import org.lyndenenv.github.io.project.sections.ContactSection
+import org.lyndenenv.github.io.project.sections.HeroSection
+import org.lyndenenv.github.io.project.sections.LiveDemoSection
+import org.lyndenenv.github.io.project.sections.ProjectsSection
+import org.lyndenenv.github.io.project.theme.PortfolioTheme
+import org.lyndenenv.github.io.project.theme.SectionTone
 
-import portfolio.shared.generated.resources.Res
-import portfolio.shared.generated.resources.compose_multiplatform
+// Each section carries its own tone. Scrolling past a section boundary
+// flips the whole color scheme -- background, text, buttons, chips --
+// giving the alternating light/dark effect as you scroll down the page.
+private data class Section(val tone: SectionTone, val content: @Composable () -> Unit)
 
 @Composable
-@Preview
 fun App() {
-    MaterialTheme {
-        var showContent by remember { mutableStateOf(false) }
-        Column(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.primaryContainer)
-                .safeContentPadding()
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Button(onClick = { showContent = !showContent }) {
-                Text("Click me!")
-            }
-            AnimatedVisibility(showContent) {
-                val greeting = remember { Greeting().greet() }
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
+    val sections = listOf(
+        Section(SectionTone.Light) { HeroSection() },
+        Section(SectionTone.Dark) { AboutSection() },
+        Section(SectionTone.Light) { ProjectsSection() },
+        Section(SectionTone.Dark) { LiveDemoSection() },
+        Section(SectionTone.Light) { ContactSection() },
+    )
+
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        itemsIndexed(sections) { _, section ->
+            PortfolioTheme(tone = section.tone) {
+                Surface(
+                    color = MaterialTheme.colorScheme.background,
+                    contentColor = MaterialTheme.colorScheme.onBackground,
                 ) {
-                    Image(painterResource(Res.drawable.compose_multiplatform), null)
-                    Text("Compose: $greeting")
+                    section.content()
                 }
             }
         }
