@@ -1,14 +1,13 @@
 package org.lyndenenv.github.io.project.sections
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedCard
@@ -36,21 +35,30 @@ data class Project(
     val demoUrl: String? = null,
 )
 
-// TODO: add more projects here once the Mogala/Python question is resolved.
 private val sampleProjects = listOf(
     Project(
+        title = "recon",
+        description = "Network reconnaissance toolkit — passive host discovery, port scanning, and service fingerprinting via a Python/Flask web UI.",
+        tech = listOf("Python", "Flask", "Scapy"),
+        repoUrl = "https://github.com/lyndenenv/recon",
+    ),
+    Project(
         title = "This portfolio",
-        description = "Kotlin Multiplatform + Compose, compiled to WebAssembly and deployed via GitHub Actions.",
+        description = "Kotlin Multiplatform + Compose, compiled to WebAssembly and deployed via GitHub Actions. Real Kotlin running in your browser.",
         tech = listOf("Kotlin", "Compose Multiplatform", "Wasm", "GitHub Actions"),
         repoUrl = "https://github.com/lyndenenv/lyndenenv.github.io",
     ),
 )
 
 @Composable
-fun HeroSection(modifier: Modifier = Modifier) {
+fun HeroSection(
+    modifier: Modifier = Modifier,
+    onScrollToProjects: (() -> Unit)? = null,
+) {
     Column(
         modifier = modifier
             .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 32.dp, vertical = 96.dp),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -64,12 +72,13 @@ fun HeroSection(modifier: Modifier = Modifier) {
             style = MaterialTheme.typography.bodyLarge,
         )
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            Button(onClick = {}) { Text("View projects") }
+            Button(onClick = { onScrollToProjects?.invoke() }) { Text("View projects") }
             OutlinedButton(onClick = {}) { Text("Download resume") }
         }
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun AboutSection(modifier: Modifier = Modifier) {
     val skills = listOf(
@@ -79,6 +88,7 @@ fun AboutSection(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 32.dp, vertical = 80.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp),
     ) {
@@ -91,39 +101,50 @@ fun AboutSection(modifier: Modifier = Modifier) {
                 "cloud platform roles — contract, freelance, or full-time.",
             style = MaterialTheme.typography.bodyLarge,
         )
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
             skills.forEach { skill -> AssistChip(onClick = {}, label = { Text(skill) }) }
         }
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ProjectsSection(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 32.dp, vertical = 80.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
         Text("Projects", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.SemiBold)
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 280.dp),
+        FlowRow(
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.heightIn(max = 900.dp),
+            maxItemsInEachRow = 2,
         ) {
-            items(sampleProjects) { project -> ProjectCard(project) }
+            sampleProjects.forEach { project ->
+                ProjectCard(project, modifier = Modifier.weight(1f))
+            }
         }
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun ProjectCard(project: Project) {
-    ElevatedCard(modifier = Modifier.fillMaxWidth()) {
+private fun ProjectCard(project: Project, modifier: Modifier = Modifier) {
+    ElevatedCard(modifier = modifier) {
         Column(modifier = Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Text(project.title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
             Text(project.description, style = MaterialTheme.typography.bodyMedium)
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                verticalArrangement = Arrangement.spacedBy(6.dp),
+            ) {
                 project.tech.forEach { tech -> SuggestionChip(onClick = {}, label = { Text(tech) }) }
             }
             TextButton(onClick = {}) { Text("View on GitHub →") }
@@ -137,6 +158,7 @@ fun LiveDemoSection(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 32.dp, vertical = 96.dp),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -158,12 +180,13 @@ fun ContactSection(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 32.dp, vertical = 96.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         Text("Let's talk", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.SemiBold)
         Text(
-            "Johannesburg, South Africa · LyndenTempies@gmail.com · Available for contract, freelance & full-time roles",
+            "Johannesburg, South Africa · lyndentempies@gmail.com · Available for contract, freelance & full-time roles",
             style = MaterialTheme.typography.bodyLarge,
         )
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
