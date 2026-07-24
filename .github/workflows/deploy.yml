@@ -16,7 +16,7 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout portfolio
         uses: actions/checkout@v4
 
       - name: Set up JDK 17
@@ -31,9 +31,37 @@ jobs:
       - name: Build Wasm/JS distribution
         run: ./gradlew :webApp:wasmJsBrowserDistribution
 
+      - name: Checkout Mogala frontend
+        uses: actions/checkout@v4
+        with:
+          repository: lyndenenv/mogala
+          path: mogala-repo
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: mogala-repo/frontend/package-lock.json
+
+      - name: Build Mogala frontend
+        working-directory: mogala-repo/frontend
+        run: |
+          npm ci
+          npm run build
+        env:
+          CI: false
+
+      - name: Stage deployment
+        run: |
+          mkdir -p dist
+          cp -r webApp/build/dist/wasmJs/productionExecutable/. dist/
+          mkdir -p dist/mogala
+          cp -r mogala-repo/frontend/build/. dist/mogala/
+
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./webApp/build/dist/wasmJs/productionExecutable
+          publish_dir: ./dist
           publish_branch: gh-pages
