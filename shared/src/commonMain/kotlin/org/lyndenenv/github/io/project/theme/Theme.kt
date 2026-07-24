@@ -9,7 +9,7 @@ enum class SectionTone { Light, Dark }
 fun PortfolioTheme(tone: SectionTone, content: @Composable () -> Unit) {
     MaterialTheme(
         colorScheme = if (tone == SectionTone.Light) LightColors else DarkColors,
-        typography = PortfolioTypography,
+        typography = portfolioTypography(),
         content = content,
     )
 }
